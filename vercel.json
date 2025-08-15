@@ -1,0 +1,15 @@
+{
+    "buildCommand": "composer install --no-dev && npm run build && php artisan migrate --force",
+    "outputDirectory": "public",
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "/api/index.php"
+        }
+    ],
+    "functions": {
+        "api/index.php": {
+            "runtime": "vercel-php@0.6.0"
+        }
+    }
+}

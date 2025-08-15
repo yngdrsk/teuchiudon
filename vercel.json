@@ -1,9 +1,13 @@
 {
-    "build": {
-        "env": {
-            "VERCEL_PHP_VERSION": "8.3"
+    "builds": [
+        {
+            "src": "api/index.php",
+            "use": "vercel-php@0.7.4",
+            "config": {
+                "phpVersion": "8.3"
+            }
         }
-    },
+    ],
     "buildCommand": "composer install --no-dev && npm run build && php artisan migrate --force",
     "outputDirectory": "public",
     "routes": [
@@ -11,10 +15,5 @@
             "src": "/(.*)",
             "dest": "/api/index.php"
         }
-    ],
-    "functions": {
-        "api/index.php": {
-            "runtime": "vercel-php@0.7.4"
-        }
-    }
+    ]
 }

@@ -1,12 +1,20 @@
-import './bootstrap';
-import '../css/app.css';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import DashboardPage from './pages/DashboardPage';
 
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
+function App() {
+    return (
+        <Router>
+            <nav>
+                <Link to="/">ホーム</Link>
+                <Link to="/dashboard">管理画面</Link>
+            </nav>
+            <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/dashboard" element={<DashboardPage />} />
+            </Routes>
+        </Router>
+    );
+}
 
-ReactDOM.createRoot(document.getElementById('app')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+export default App;

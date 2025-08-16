@@ -169,7 +169,7 @@ return [
     |
     */
 
-    'secure' => env('SESSION_SECURE_COOKIE'),
+    'secure' => env('SESSION_SECURE_COOKIE', false), // trueの場合、HTTPS接続が必要になる
 
     /*
     |--------------------------------------------------------------------------
@@ -198,8 +198,9 @@ return [
     | Supported: "lax", "strict", "none", null
     |
     */
-
-    'same_site' => env('SESSION_SAME_SITE', 'lax'),
+    
+    'same_site' => 'lax', // 'strict'から'lax'または'none'に変更
+    // 'same_site' => env('SESSION_SAME_SITE', 'lax'),
 
     /*
     |--------------------------------------------------------------------------

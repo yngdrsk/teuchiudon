@@ -48,6 +48,6 @@ jobs:
             php artisan route:cache
             
             # NginxとPHP-FPMサービスの再起動
-            sudo systemctl restart php8.2-fpm
+            sudo systemctl restart php8.3-fpm
             sudo systemctl restart nginx
           EOF

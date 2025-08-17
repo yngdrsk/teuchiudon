@@ -23,27 +23,27 @@ jobs:
         run: |
           # SSH接続とデプロイコマンドの実行
           ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
-            # プロジェクトのルートディレクトリを作成し、適切な権限を付与
+            # プロジェクトのルートディレクトリを準備
             sudo mkdir -p /var/www/teuchiudon
             sudo chown -R ubuntu:ubuntu /var/www/teuchiudon
             
-            # リポジトリがまだ存在しない場合はクローンする
-            if [ ! -d "/var/www/teuchiudon/.git" ]; then
-              cd /var/www/teuchiudon
+            # ディレクトリへ移動
+            cd /var/www/teuchiudon
+            
+            # リポジトリがまだクローンされていない場合、クローンを実行
+            if [ ! -d ".git" ]; then
               git clone https://github.com/yngdrsk/teuchiudon.git .
             fi
-            
-            # バックエンドディレクトリへ移動し、最新のコードを取得
+
+            # バックエンドディレクトリへ移動し、最新のコードをプル
             cd /var/www/teuchiudon/backend
             git pull origin main
             
-            # 依存関係のインストールとキャッシュクリア
+            # 依存関係のインストール
             composer install --no-dev --optimize-autoloader
             
-            # データベースマイグレーションの実行
+            # artisan コマンドの実行
             php artisan migrate --force
-            
-            # 設定とルートのキャッシュ
             php artisan config:cache
             php artisan route:cache
             

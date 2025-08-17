@@ -35,9 +35,15 @@ jobs:
               git clone https://github.com/yngdrsk/teuchiudon.git .
             fi
 
-            # バックエンドディレクトリへ移動し、最新のコードをプル
-            cd /var/www/teuchiudon/backend
+            # 最新のコードをプル
             git pull origin main
+
+            # フロントエンドディレクトリを削除してクリーンな状態を保つ
+            # この行を追加することで、frontendディレクトリを削除します
+            sudo rm -rf /var/www/teuchiudon/frontend
+            
+            # バックエンドディレクトリへ移動
+            cd /var/www/teuchiudon/backend
             
             # 依存関係のインストール
             composer install --no-dev --optimize-autoloader

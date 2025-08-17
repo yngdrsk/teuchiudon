@@ -1,0 +1,50 @@
+# deploy.yml
+
+name: Deploy Laravel to EC2
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Deploy to EC2
+        run: |
+          # SSH接続とデプロイコマンドの実行
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
+            # Gitリポジトリが存在しない場合はクローン、存在する場合はプル
+            if [ ! -d "/var/www/teuchiudon" ]; then
+              git clone git@github.com:${{ github.repository }} /var/www/teuchiudon
+            fi
+            
+            # バックエンドディレクトリへ移動
+            cd /var/www/teuchiudon/backend
+            
+            # 最新のコードを取得
+            git pull origin main
+            
+            # 依存関係のインストールとキャッシュクリア
+            composer install --no-dev --optimize-autoloader
+            
+            # データベースマイグレーションの実行
+            php artisan migrate --force
+            
+            # 設定とルートのキャッシュ
+            php artisan config:cache
+            php artisan route:cache
+            
+            # NginxとPHP-FPMサービスの再起動
+            sudo systemctl restart php8.2-fpm
+            sudo systemctl restart nginx
+          EOF

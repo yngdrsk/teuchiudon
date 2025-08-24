@@ -174,3 +174,32 @@ GitHub Actionsのデプロイが完了したら、EC2インスタンス上で最
   - [ ] **LaravelのCORS設定**
 
       - `config/cors.php`を編集し、Vercelのドメインからのアクセスを許可します。
+
+
+## ここまででの状況
+
+### アクセス可能なURL：
+1. Laravel バックエンド: http://localhost
+   + Laravelのメインアプリケーション
+   + APIエンドポイント: http://localhost/api/*
+2. フロントエンド（Vite）: http://localhost:5173
+   + Reactアプリケーション
+3. その他のサービス:
+   + Mailpit (メール確認): http://localhost:8025
+   + Meilisearch: http://localhost:7700
+   + PostgreSQL: localhost:5432
+   + Redis: localhost:6379
+### 推奨アクセス順序：
+1. まず http://localhost でLaravelバックエンドが正常に動作することを確認
+2. 次に http://localhost:5173 でReactフロントエンドにアクセス
+
+これで、フロントエンドとバックエンドの両方がDocker環境で動作しているはずです。
+
+1. /backendo ディレクトリで
+    + sail up -d
+    + http://localhost でアクセス
+
+2. /frontendディレクトリで（ターミナルは別タブで）
+   + npm run dev -- --port 3000
+   + http://localhost:3000でアクセス
+
